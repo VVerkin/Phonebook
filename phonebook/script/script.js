@@ -39,6 +39,16 @@
     return h1;
   };
 
+const createMain = () => {
+  const main = document.createElement('main');
+  const mainContainer = createContainer();
+  main.append(mainContainer);
+  main.mainContainer = mainContainer;
+
+  return main;
+};
+
+
   // Ф-я, конорая инициализирует наше приложение
   const init = (selectorApp, title) => {
     // Получим элемент по селектору
