@@ -133,6 +133,33 @@ const data = [
     return table;
   };
 
+  // Ф-я создает футер
+  const createFooter = () => {
+    // Создаем эл-т футер
+    const footer = document.createElement('footer');
+    // Элементу footer добавляем класс footer
+    footer.classList.add('footer');
+    // Все эл-ты в хедер вставляются в контейнер. Поэтому контейнер привяжем к элементу как свойство объекта 
+    // Создаем контейнер
+    const footerContainer = createContainer();
+    // Вставляем контейнер в footer
+    footer.append(footerContainer);
+    // Привязываем footerContainer к footer
+    footer.footerContainer = footerContainer;
+    // Возвращаем footer
+    return footer;
+  };
+  //Ф-я принимает title и зоздает контент, который поместим в footer
+  const createCopyRight = title => {
+    // Создаем в верстке эл-т для текста
+    const copyRight = document.createElement('p');
+    // Добавляем текст в элемент для текста
+    copyRight.textContent = `Все права защищены ©${title}`;
+    // Возвращаем получившуюся строку
+    return copyRight;
+  };
+
+
   // Ф-я зоздает форму для добавления данных
   const createForm = () => {
     // Почти все формы в модальном окне, поэтому создадим overlay для модального окна
@@ -209,17 +236,20 @@ const buttonGroup = createButtonsGroup ([
         text: 'Удалить', // текст кнопки 2
       },
     ]);
-    // Создаем переменную для таблицы
+    // Вызов функции создания таблицы
     const table = createTable();
+    // Вызов ф-ии, создания футера
+    const footer = createFooter();
+    const copyRight = createCopyRight(title);
     // Вызываем форму
     const form = createForm();
     // Добавляем кнопки,таблицу и оверлай в main
     main.mainContainer.append(buttonGroup.btnWrapper, table, form.overlay);
     // Добавляем добавляем заголовок в контейнер хедера
     header.headerContainer.append(logo);
-    // Добавляем header и main на страницу, в которые мы сможем добавлять элементы
-
-    app.append(header, main);
+    // Добавляем элементы header, main и footer на страницу, в которые мы сможем добавлять содержимое
+    footer.footerContainer.append(copyRight);
+    app.append(header, main, footer);
 
     // Основная функция возвращает объект с необходимыми нам элементами
     return {
