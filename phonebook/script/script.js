@@ -255,6 +255,7 @@ const buttonGroup = createButtonsGroup ([
     return {
       //tbody можно вывести только черерез свойство лист в объекте
       list: table.tbody,
+      logo,
     };
   };
 // Ф-я создает строку на основе данных из объекта. Можно так:   const createRow = dataObj, но лучше через деструктуризацию
@@ -287,6 +288,7 @@ const buttonGroup = createButtonsGroup ([
     const phoneLink = document.createElement('a');
     phoneLink.href = `tel:${phone}`;
     phoneLink.textContent = phone; // В качестве контента берем деструктурированные данные
+    tr.phoneLink = phoneLink;
     // В tdPhone дщбавляем нашу ссылку
     tdPhone.append(phoneLink);
 
@@ -301,7 +303,23 @@ const buttonGroup = createButtonsGroup ([
     const allRow = data.map(createRow);
     // выводим результат на страницу
     elem.append(...allRow);
+
+    return allRow;
   };
+// Ф-я, которая при наведении на строку с номером телефона показывает его в хедере
+const hoverRow = (allRow, logo) => {
+  // Перебираем все строки
+  allRow.forEach(contact => {
+      // При наведении мыши на строку будем вызывать функцию,
+    contact.addEventListener('mouseenter', () => {
+      // Которая в консоль будет передавать mouseEnter
+      console.log('mouseEnter', contact);
+      // У logo будет меняться содержимое
+      logo.textContent = contact.phoneLink.textContent;
+    });
+  });
+};
+
  // Ф-я, конорая инициализирует наше приложение
   const init = (selectorApp, title) => {
     // Получим элемент по селектору и передадим в ф-ю render
@@ -309,10 +327,13 @@ const buttonGroup = createButtonsGroup ([
     // Вызываем основную функцию и передаем в нее app и title
     const phoneBook = renderPhoneBook(app, title);
     // Выполним деструктуризацию list из phoneBook
-    const {list} = phoneBook;
-    //В ф-ю передаем list в чистом виде после деструктуризации и data
-    renderContacts(list, data);
+    const {list, logo} = phoneBook;
+
     // Функционал
+    //В ф-ю передаем list в чистом виде после деструктуризации и data
+    const allRow = renderContacts(list, data);
+    // Вызываем функцию, передаем allRow и logo?  иначе не сможем с ними взаимодействовать
+    hoverRow(allRow, logo);
   };
 
   window.phoneBookInit = init;
