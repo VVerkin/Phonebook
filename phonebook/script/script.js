@@ -169,7 +169,7 @@ const data = [
     // Создаем форму
     const form = document.createElement('form');
     // Добавляем класс форме
-    overlay.classList.add('form-overlay');
+    form.classList.add('form');
     // Форма статичная, поэтому просто вставляем верстку
     form.insertAdjacentHTML('beforeend', `
     <button class ="close" type="button"></button>
@@ -256,6 +256,8 @@ const buttonGroup = createButtonsGroup ([
       //tbody можно вывести только черерез свойство лист в объекте
       list: table.tbody,
       logo,
+      btnAdd: buttonGroup.btns[0],
+      formOverlay: form.overlay,
     };
   };
 // Ф-я создает строку на основе данных из объекта. Можно так:   const createRow = dataObj, но лучше через деструктуризацию
@@ -307,18 +309,23 @@ const buttonGroup = createButtonsGroup ([
     return allRow;
   };
 // Ф-я, которая при наведении на строку с номером телефона показывает его в хедере
-const hoverRow = (allRow, logo) => {
-  // Перебираем все строки
-  allRow.forEach(contact => {
+  const hoverRow = (allRow, logo) => {
+  // У logo в замыкании будем хранить текст? который был изначально
+    const text = logo.textContent;
+    // Перебираем все строки
+    allRow.forEach(contact => {
       // При наведении мыши на строку будем вызывать функцию,
-    contact.addEventListener('mouseenter', () => {
+      contact.addEventListener('mouseenter', () => {
       // Которая в консоль будет передавать mouseEnter
-      console.log('mouseEnter', contact);
       // У logo будет меняться содержимое
-      logo.textContent = contact.phoneLink.textContent;
+        logo.textContent = contact.phoneLink.textContent;
+      });
+      // При отведении мыши от строки будем возвращать исходный текст
+      contact.addEventListener('mouseleave', () => {
+        logo.textContent = text;
+      });
     });
-  });
-};
+  };
 
  // Ф-я, конорая инициализирует наше приложение
   const init = (selectorApp, title) => {
@@ -327,13 +334,21 @@ const hoverRow = (allRow, logo) => {
     // Вызываем основную функцию и передаем в нее app и title
     const phoneBook = renderPhoneBook(app, title);
     // Выполним деструктуризацию list из phoneBook
-    const {list, logo} = phoneBook;
+    const {list, logo, btnAdd, formOverlay} = phoneBook;
 
     // Функционал
     //В ф-ю передаем list в чистом виде после деструктуризации и data
     const allRow = renderContacts(list, data);
     // Вызываем функцию, передаем allRow и logo?  иначе не сможем с ними взаимодействовать
     hoverRow(allRow, logo);
+    // При клике на кнопку "Добавить" открывается модальное окно
+    // Создадим объект
+    const objEvent = {
+      handleEvent() {
+        formOverlay.classList.add('is-visible');
+      },
+    };
+    btnAdd.addEventListener('click', objEvent);
   };
 
   window.phoneBookInit = init;
