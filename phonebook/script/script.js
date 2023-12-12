@@ -226,7 +226,7 @@ const buttonGroup = createButtonsGroup ([
     // в скобках указываем параметры, которые будем передавать в params.map({})
     const buttonGroup = createButtonsGroup([
       {
-        className: 'btn btn-primary mr-3', // класс кнопки 1. mr-3 отступ по bootstrap
+        className: 'btn btn-primary mr-3 js-add', // класс кнопки 1. mr-3 отступ по bootstrap
         type: 'button', // тип кнопки 1
         text: 'Добавить', // текст кнопки 1
       },
@@ -258,6 +258,7 @@ const buttonGroup = createButtonsGroup ([
       logo,
       btnAdd: buttonGroup.btns[0],
       formOverlay: form.overlay,
+      form: form.form,
     };
   };
 // Ф-я создает строку на основе данных из объекта. Можно так:   const createRow = dataObj, но лучше через деструктуризацию
@@ -326,7 +327,6 @@ const buttonGroup = createButtonsGroup ([
       });
     });
   };
-
  // Ф-я, конорая инициализирует наше приложение
   const init = (selectorApp, title) => {
     // Получим элемент по селектору и передадим в ф-ю render
@@ -334,7 +334,7 @@ const buttonGroup = createButtonsGroup ([
     // Вызываем основную функцию и передаем в нее app и title
     const phoneBook = renderPhoneBook(app, title);
     // Выполним деструктуризацию list из phoneBook
-    const {list, logo, btnAdd, formOverlay} = phoneBook;
+    const {list, logo, btnAdd, formOverlay, form} = phoneBook;
 
     // Функционал
     //В ф-ю передаем list в чистом виде после деструктуризации и data
@@ -342,13 +342,32 @@ const buttonGroup = createButtonsGroup ([
     // Вызываем функцию, передаем allRow и logo?  иначе не сможем с ними взаимодействовать
     hoverRow(allRow, logo);
     // При клике на кнопку "Добавить" открывается модальное окно
-    // Создадим объект
-    const objEvent = {
-      handleEvent() {
-        formOverlay.classList.add('is-visible');
-      },
-    };
-    btnAdd.addEventListener('click', objEvent);
+    btnAdd.addEventListener('click', () => {
+      formOverlay.classList.add('is-visible');
+    });
+
+    //Блокируем всплытие что бы форма не закрывалась при клике на нее
+    form.addEventListener('click', event => {
+      event.stopPropagation();
+    });
+    //Ф-я закрывает форму при клике на оверлей
+    formOverlay.addEventListener('click', () => {
+      formOverlay.classList.remove('is-visible');
+    });
+
+    // Взаимодействие с тачскринами мобильных устройств
+    // Аналог mousedown (прикосновение к DOM элементу)
+    document.addEventListener('touchstart', e => {
+      console.log(e.type);
+    });
+    // Аналог mousemove (движение пальца по DOM элементу)
+    document.addEventListener('touchmove', e => {
+      console.log(e.type);
+    });
+    // Аналог mouseup (событие когда палец убираем от DOM элемента)
+    document.addEventListener('touchend', e => {
+      console.log(e.type);
+    });
   };
 
   window.phoneBookInit = init;
