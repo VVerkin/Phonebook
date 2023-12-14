@@ -292,7 +292,7 @@ const buttonGroup = createButtonsGroup ([
     phoneLink.href = `tel:${phone}`;
     phoneLink.textContent = phone; // В качестве контента берем деструктурированные данные
     tr.phoneLink = phoneLink;
-    // В tdPhone дщбавляем нашу ссылку
+    // В tdPhone добавляем нашу ссылку
     tdPhone.append(phoneLink);
 
     // Вставляем td в tr
@@ -327,7 +327,7 @@ const buttonGroup = createButtonsGroup ([
       });
     });
   };
- // Ф-я, конорая инициализирует наше приложение
+ // Ф-я, которая инициализирует наше приложение
   const init = (selectorApp, title) => {
     // Получим элемент по селектору и передадим в ф-ю render
     const app = document.querySelector(selectorApp);
@@ -350,7 +350,13 @@ const buttonGroup = createButtonsGroup ([
     form.addEventListener('click', event => {
       event.stopPropagation();
     });
+    const btnClose = document.querySelector('.close');
     //Ф-я закрывает форму при клике на оверлей
+    btnClose.addEventListener('click', () => {
+      formOverlay.classList.remove('is-visible');
+    });
+
+    //Ф-я закрывает форму при клике на крестик
     formOverlay.addEventListener('click', () => {
       formOverlay.classList.remove('is-visible');
     });
