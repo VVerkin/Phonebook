@@ -225,11 +225,13 @@ const buttonGroup = createButtonsGroup ([
     // Принимаем кнопки
     // в скобках указываем параметры, которые будем передавать в params.map({})
     const buttonGroup = createButtonsGroup([
+      // Кнопка Добавить
       {
         className: 'btn btn-primary mr-3 js-add', // класс кнопки 1. mr-3 отступ по bootstrap
         type: 'button', // тип кнопки 1
         text: 'Добавить', // текст кнопки 1
       },
+      // Кнопка Удалить
       {
         className: 'btn btn-danger', // класс кнопки 2
         type: 'button', // тип кнопки 2
@@ -256,7 +258,10 @@ const buttonGroup = createButtonsGroup ([
       //tbody можно вывести только черерез свойство лист в объекте
       list: table.tbody,
       logo,
+      // Возвращаем кнопку добавить
       btnAdd: buttonGroup.btns[0],
+      // Возвращаем кнопку "Удалить"
+      btnDel: buttonGroup.btns[1],
       formOverlay: form.overlay,
       form: form.form,
     };
@@ -266,7 +271,8 @@ const buttonGroup = createButtonsGroup ([
   const createRow = ({name: firstName, surname, phone}) => { // Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
   // Создаем строку
   const tr = document.createElement('tr');
-
+  // Назначасем класс contact, т.к. записываем контакты людей
+  tr.classList.add('contact');
 // Создаем ячейки
     // в tdDel данных нет, есть кнопка. 
     const tdDel = document.createElement('td');
@@ -334,7 +340,14 @@ const buttonGroup = createButtonsGroup ([
     // Вызываем основную функцию и передаем в нее app и title
     const phoneBook = renderPhoneBook(app, title);
     // Выполним деструктуризацию list из phoneBook
-    const {list, logo, btnAdd, formOverlay, form} = phoneBook;
+    const {
+      list,
+      logo,
+      btnAdd,
+      btnDel,
+      formOverlay,
+      form,
+    } = phoneBook;
 
     // Функционал
     //В ф-ю передаем list в чистом виде после деструктуризации и data
@@ -346,21 +359,35 @@ const buttonGroup = createButtonsGroup ([
       formOverlay.classList.add('is-visible');
     });
 
-    //Блокируем всплытие что бы форма не закрывалась при клике на нее
-    form.addEventListener('click', event => {
-      event.stopPropagation();
-    });
-    const btnClose = document.querySelector('.close');
-    //Ф-я закрывает форму при клике на оверлей
-    btnClose.addEventListener('click', () => {
-      formOverlay.classList.remove('is-visible');
-    });
-
-    //Ф-я закрывает форму при клике на крестик
-    formOverlay.addEventListener('click', () => {
-      formOverlay.classList.remove('is-visible');
+    //Ф-я закрывает форму при клике на overlay или на крестик
+    formOverlay.addEventListener('click', e => {
+      const target = e.target; // создаем переменную target что бы дальше не писать event.target
+      // Проверяем, что target - это formOverlay
+      if (target === formOverlay || target.classList.contains('close')) {
+        // Если да, то закрываем форму
+        formOverlay.classList.remove('is-visible');
+      }
     });
 
+
+    // Навешиваем событие на кнопку "Удалить"
+    btnDel.addEventListener('click', () => {
+    // Проходим по таблице, находим элементы с классом delete и показываем их
+    document.querySelectorAll('.delete').forEach(del => {
+      del.classList.toggle('is-visible');
+      });
+    });
+
+    // С помощью делегирования m,eltv кликать по list - это вся наша область таблицы
+    list.addEventListener('click', event => {
+      const target = event.target // Назначаем переменную, что бы дальне не писать event.target
+      // contains используют если кнопка в единственном виде без содержимого 
+      // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
+      if (target.closest('.del-icon')) {
+        // находим родителя у event.target и удаляем его
+        target.closest('.contact').remove();
+      }
+    });
     // Взаимодействие с тачскринами мобильных устройств
     // Аналог mousedown (прикосновение к DOM элементу)
     document.addEventListener('touchstart', e => {
@@ -374,6 +401,17 @@ const buttonGroup = createButtonsGroup ([
     document.addEventListener('touchend', e => {
       console.log(e.type);
     });
+
+    // Ф-я автоматической вставки строки с данными
+    setTimeout(() => {
+      // создаем строку из объекта
+      const contact = createRow({
+        name: 'Максим',
+        surname: 'Лескин',
+        phone: '001',
+      });
+      list.append(contact);
+    }, 1000);
   };
 
   window.phoneBookInit = init;
