@@ -333,33 +333,13 @@ const buttonGroup = createButtonsGroup ([
       });
     });
   };
- // Ф-я, которая инициализирует наше приложение
-  const init = (selectorApp, title) => {
-    // Получим элемент по селектору и передадим в ф-ю render
-    const app = document.querySelector(selectorApp);
-    // Вызываем основную функцию и передаем в нее app и title
-    const phoneBook = renderPhoneBook(app, title);
-    // Выполним деструктуризацию list из phoneBook
-    const {
-      list,
-      logo,
-      btnAdd,
-      btnDel,
-      formOverlay,
-      form,
-    } = phoneBook;
-
-    // Функционал
-    //В ф-ю передаем list в чистом виде после деструктуризации и data
-    const allRow = renderContacts(list, data);
-    // Вызываем функцию, передаем allRow и logo?  иначе не сможем с ними взаимодействовать
-    hoverRow(allRow, logo);
-    // При клике на кнопку "Добавить" открывается модальное окно
+  // Ф-я открывает модальное окно с формой при нажатии на кнопку "Добавить"
+  const modalControl = (btnAdd, formOverlay) => {
+    // Навешиваем событие при клике на кнопку
     btnAdd.addEventListener('click', () => {
       formOverlay.classList.add('is-visible');
     });
-
-    //Ф-я закрывает форму при клике на overlay или на крестик
+// Ф-я закрывает форму при клике на overlay или на крестик
     formOverlay.addEventListener('click', e => {
       const target = e.target; // создаем переменную target что бы дальше не писать event.target
       // Проверяем, что target - это formOverlay
@@ -368,26 +348,55 @@ const buttonGroup = createButtonsGroup ([
         formOverlay.classList.remove('is-visible');
       }
     });
-
-
-    // Навешиваем событие на кнопку "Удалить"
-    btnDel.addEventListener('click', () => {
-    // Проходим по таблице, находим элементы с классом delete и показываем их
-    document.querySelectorAll('.delete').forEach(del => {
-      del.classList.toggle('is-visible');
-      });
+  };
+// Ф-я при нажатии на кнопку "Удалить" показывает крестики, при нажатии на которые удаляется строка
+const deleteControl = (btnDel, list) => {
+// Навешиваем событие на кнопку "Удалить"
+btnDel.addEventListener('click', () => {
+  // Проходим по таблице, находим элементы с классом delete и показываем их
+  document.querySelectorAll('.delete').forEach(del => {
+    del.classList.toggle('is-visible');
     });
+  });
 
-    // С помощью делегирования m,eltv кликать по list - это вся наша область таблицы
-    list.addEventListener('click', event => {
-      const target = event.target // Назначаем переменную, что бы дальне не писать event.target
-      // contains используют если кнопка в единственном виде без содержимого 
-      // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
-      if (target.closest('.del-icon')) {
-        // находим родителя у event.target и удаляем его
-        target.closest('.contact').remove();
-      }
-    });
+  // С помощью делегирования m,eltv кликать по list - это вся наша область таблицы
+  list.addEventListener('click', event => {
+    const target = event.target // Назначаем переменную, что бы дальне не писать event.target
+    // contains используют если кнопка в единственном виде без содержимого 
+    // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
+    if (target.closest('.del-icon')) {
+      // находим родителя у event.target и удаляем его
+      target.closest('.contact').remove();
+    }
+  });
+};
+
+
+ // Ф-я, которая инициализирует наше приложение
+  const init = (selectorApp, title) => {
+    // Получим элемент по селектору и передадим в ф-ю render
+    const app = document.querySelector(selectorApp);
+    // Получаем объект и сразу выполняем деструктуризацию
+    const {
+      list,
+      logo,
+      btnAdd,
+      btnDel,
+      formOverlay,
+      form,
+    } = renderPhoneBook(app, title);
+
+    // Функционал
+    //В ф-ю передаем list в чистом виде после деструктуризации и data
+    const allRow = renderContacts(list, data);
+    // Вызываем функцию, передаем allRow и logo?  иначе не сможем с ними взаимодействовать
+    hoverRow(allRow, logo);
+    // Вызываем ф-ю открытия модального окна при нажатии кн "Добавить"
+    modalControl(btnAdd, formOverlay);
+    // Вызываем ф-ю проявления "крестиков" при нажатии кнопки "удалить"
+    deleteControl(btnDel, list);
+    formControl(form);
+
     // Взаимодействие с тачскринами мобильных устройств
     // Аналог mousedown (прикосновение к DOM элементу)
     document.addEventListener('touchstart', e => {
@@ -402,7 +411,7 @@ const buttonGroup = createButtonsGroup ([
       console.log(e.type);
     });
 
-    // Ф-я автоматической вставки строки с данными
+    // Ф-я автоматической вставки строки с данными через 2с
     setTimeout(() => {
       // создаем строку из объекта
       const contact = createRow({
@@ -410,6 +419,7 @@ const buttonGroup = createButtonsGroup ([
         surname: 'Лескин',
         phone: '001',
       });
+      // Добавим строку в наш tbody (list)
       list.append(contact);
     }, 1000);
   };
