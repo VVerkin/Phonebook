@@ -23,6 +23,13 @@ const data = [
   },
 ];
 
+// Создадим временную ф-ю что-бы в будущем мы ее переписали и добавляли наши контакты в какое-то хранилище
+const addContactData = contact => {
+  // Добавляем введенный пользователем контакт в исходный массив data
+  data.push(contact);
+  console.log('data:', data);
+};
+
 /*Создаем свою область видимости, 
 чтобы ничего не выходило в глобальную область, 
 кроме того, что необходимо вынести*/
@@ -381,15 +388,30 @@ const buttonGroup = createButtonsGroup ([
     }
   });
 };
+  // Ф-я принимает contact и list и добавляет contact в list
+  const addContactPage = (contact, list) => {
+    // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
+    list.append(createRow(contact));
+  };
+
   // Функция обрабатывает форму
-  const formControl = (form, closeModal) => {
+  const formControl = (form, list, closeModal) => {
   // Вешаем событе на нажатие кнопки "Добавить" в форме
     form.addEventListener('submit', e => {
       // Убираем стандартную перезагрузку страницы при нажатии на кнопку "добавить"
       e.preventDefault();
-
+      // Создаем FormData и передаем туда форму через e.target
+      const formData = new FormData(e.target);
+      // Создаем объект, который будет формироваться из введеных пользователем данных в формк=у
+      const newContact = Object.fromEntries(formData);
+      console.log('newContact:', newContact);
+      // Вызываем функцию добавления контакта в таблицу на странице
+      addContactPage(newContact, list);
+      // Вызываем временную функцию добавления контакта в массив
+      addContactData(newContact);
       // Добавляем очистку формы  после того как она отработает
       form.reset();
+      // Добавляем закрытие формы  после того как она очистится
       closeModal();
     });
   };
@@ -419,33 +441,7 @@ const buttonGroup = createButtonsGroup ([
     // Вызываем ф-ю проявления "крестиков" при нажатии кнопки "удалить"
     deleteControl(btnDel, list);
     // Принимает деструктурированную форму
-    formControl(form, closeModal);
-
-    // Взаимодействие с тачскринами мобильных устройств
-    // Аналог mousedown (прикосновение к DOM элементу)
-    document.addEventListener('touchstart', e => {
-      console.log(e.type);
-    });
-    // Аналог mousemove (движение пальца по DOM элементу)
-    document.addEventListener('touchmove', e => {
-      console.log(e.type);
-    });
-    // Аналог mouseup (событие когда палец убираем от DOM элемента)
-    document.addEventListener('touchend', e => {
-      console.log(e.type);
-    });
-
-    // Ф-я автоматической вставки строки с данными через 2с
-    setTimeout(() => {
-      // создаем строку из объекта
-      const contact = createRow({
-        name: 'Максим',
-        surname: 'Лескин',
-        phone: '001',
-      });
-      // Добавим строку в наш tbody (list)
-      list.append(contact);
-    }, 1000);
+    formControl(form, list, closeModal);
   };
 
   window.phoneBookInit = init;
