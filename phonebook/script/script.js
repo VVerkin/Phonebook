@@ -23,6 +23,30 @@ const data = [
   },
 ];
 
+/* Ф-я получает в виде аргумента ключ и по нему запрашивает 
+данные из localStorage и возвращает их, если их нет то возвращает пустой массив */
+const getStorage = (key) => {
+  // Запрос данных из localStore по ключу и распарсивание полученного объекта
+  const data = JSON.parse(localStorage.getItem(key));
+  // Условие, при котором возвращаются данне, а если их нет - пустой массив
+  return data ? data : [];
+};
+// Ф-я получает ключ и объект в виде аргументов и дописывает данные в localStorage
+const setStorage = (key, data) => {
+  // Вызываем ф-ю, которая получает данные из localStorage и возвращает их.
+  const availableData = getStorage(key);
+  // Добавляем данные в массив
+  availableData.push(data);
+  // Отправляем данные в localStorage
+  localStorage.setItem(key, JSON.stringify(availableData));
+};
+
+const removeStorage = (phone) => {
+  const existingData = getStorage('contacts');
+  const updatedData = existingData.filter(contact => contact.phone !== phone);
+  localStorage.setItem('contacts', JSON.stringify(updatedData));
+};
+
 // Создадим временную ф-ю что-бы в будущем мы ее переписали и добавляли наши контакты в какое-то хранилище
 const addContactData = contact => {
   // Добавляем введенный пользователем контакт в исходный массив data
