@@ -292,7 +292,7 @@ const buttonGroup = createButtonsGroup ([
     //Появившиеся кнопки оформляем подготовленным классом
     buttonDel.classList.add('del-icon');
     // Добавляем атрибут data-phone
-    buttonDel.setAttribute('data-phone', phone);
+    buttonDel.dataset.phone = phone;
     //в ячейку tdDel вставляем кнопку
     tdDel.append(buttonDel);
 
