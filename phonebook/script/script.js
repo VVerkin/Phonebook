@@ -1,28 +1,5 @@
 'use strict';
 
-const data = [
-  {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
-  },
-  {
-    name: 'Игорь',
-    surname: 'Семёнов',
-    phone: '+79999999999',
-  },
-  {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
-  },
-  {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
-  },
-];
-
 /* Ф-я получает в виде аргумента ключ и по нему запрашивает 
 данные из localStorage и возвращает их, если их нет то возвращает пустой массив */
 const getStorage = (key) => {
@@ -33,15 +10,15 @@ const getStorage = (key) => {
 };
 console.log(getStorage());
 // Ф-я получает ключ и объект в виде аргументов и дописывает данные в localStorage
-const setStorage = (key, localData) => {
+const setStorage = (key, obj) => {
   // Вызываем ф-ю, которая получает данные из localStorage и возвращает их.
-  const newData = getStorage('contacts');
-  // Добавляем данные в массив 
-  newData.push(localData);
+  const newData = getStorage(key);
+  // Добавляем данные (объект) в массив
+  newData.push(obj);
   // Отправляем данные в localStorage
   localStorage.setItem('contacts', JSON.stringify(newData));
 };
-
+// removeStorage получает в виде аргумента номер телефона, и удаляет контакт из localStorage
 const removeStorage = (phone) => {
   const existingData = getStorage('contacts');
   const updatedData = existingData.filter(contact => contact.phone !== phone);
@@ -314,8 +291,11 @@ const buttonGroup = createButtonsGroup ([
     const buttonDel = document.createElement('button');
     //Появившиеся кнопки оформляем подготовленным классом
     buttonDel.classList.add('del-icon');
+    // Добавляем атрибут data-phone
+    buttonDel.setAttribute('data-phone', phone);
     //в ячейку tdDel вставляем кнопку
     tdDel.append(buttonDel);
+
 
     
     // Оформляем омтальные элементы
@@ -403,15 +383,18 @@ const buttonGroup = createButtonsGroup ([
 
     // С помощью делегирования m,eltv кликать по list - это вся наша область таблицы
     list.addEventListener('click', event => {
-    const target = event.target // Назначаем переменную, что бы дальне не писать event.target
-    // contains используют если кнопка в единственном виде без содержимого 
-    // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
+      const target = event.target // Назначаем переменную, что бы дальне не писать event.target
+      // contains используют если кнопка в единственном виде без содержимого 
+      // closest используют когда внутри элемента есть еще элемент. Например, внутри кнопки svg
       if (target.closest('.del-icon')) {
       // находим родителя у event.target и удаляем его
-      target.closest('.contact').remove();
-    }
-  });
-};
+        // из localstorage
+        removeStorage(target.dataset.phone);
+        // из таблицы
+        target.closest('.contact').remove();
+      }
+    });
+  };
   // Ф-я принимает contact и list и добавляет contact в list
   const addContactPage = (contact, list) => {
     // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
@@ -442,8 +425,8 @@ const buttonGroup = createButtonsGroup ([
       form.reset();
       // Добавляем закрытие формы  после того как она очистится
       closeModal();
-      // Вызываем функцию setStorage, передавая значения полей формы в качестве аргументов
-      setStorage('newContact:', newContact);
+      // Вызываем функцию setStorage, передавая ключ и объект из полей ввода формы
+      setStorage('contacts', newContact);
     });
   };
 
@@ -452,6 +435,8 @@ const buttonGroup = createButtonsGroup ([
   const init = (selectorApp, title) => {
     // Получим элемент по селектору и передадим в ф-ю render
     const app = document.querySelector(selectorApp);
+    // Получаем data
+    const data = getStorage('contacts');
     // Получаем объект и сразу выполняем деструктуризацию
     const {
       list,
