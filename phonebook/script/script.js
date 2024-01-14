@@ -27,18 +27,19 @@ const data = [
 данные из localStorage и возвращает их, если их нет то возвращает пустой массив */
 const getStorage = (key) => {
   // Запрос данных из localStore по ключу и распарсивание полученного объекта
-  const data = JSON.parse(localStorage.getItem(key));
+  const localData = JSON.parse(localStorage.getItem(key));
   // Условие, при котором возвращаются данне, а если их нет - пустой массив
-  return data ? data : [];
+  return localData || [];
 };
+console.log(getStorage());
 // Ф-я получает ключ и объект в виде аргументов и дописывает данные в localStorage
-const setStorage = (key, data) => {
+const setStorage = (key, localData) => {
   // Вызываем ф-ю, которая получает данные из localStorage и возвращает их.
-  const availableData = getStorage(key);
-  // Добавляем данные в массив
-  availableData.push(data);
+  const newData = getStorage('contacts');
+  // Добавляем данные в массив 
+  newData.push(localData);
   // Отправляем данные в localStorage
-  localStorage.setItem(key, JSON.stringify(availableData));
+  localStorage.setItem('contacts', JSON.stringify(newData));
 };
 
 const removeStorage = (phone) => {
@@ -48,11 +49,11 @@ const removeStorage = (phone) => {
 };
 
 // Создадим временную ф-ю что-бы в будущем мы ее переписали и добавляли наши контакты в какое-то хранилище
-const addContactData = contact => {
-  // Добавляем введенный пользователем контакт в исходный массив data
-  data.push(contact);
-  console.log('data:', data);
-};
+// const addContactData = contact => {
+  //Добавляем введенный пользователем контакт в исходный массив data
+//   data.push(contact);
+//   console.log('data:', data);
+// };
 
 /*Создаем свою область видимости, 
 чтобы ничего не выходило в глобальную область, 
@@ -243,7 +244,6 @@ const buttonGroup = createButtonsGroup ([
     };
   };
 
-
  // Основная функция
   const renderPhoneBook = (app, title) => {
 
@@ -429,14 +429,21 @@ const buttonGroup = createButtonsGroup ([
       // Создаем объект, который будет формироваться из введеных пользователем данных в формк=у
       const newContact = Object.fromEntries(formData);
       console.log('newContact:', newContact);
+      // Получаем значения полей формы
+      // const name = form.querySelector('#name').value;
+      // const surname = form.querySelector('#surname').value;
+      // const phone = form.querySelector('#phone').value;
+
       // Вызываем функцию добавления контакта в таблицу на странице
       addContactPage(newContact, list);
       // Вызываем временную функцию добавления контакта в массив
-      addContactData(newContact);
+      // addContactData(newContact);
       // Добавляем очистку формы  после того как она отработает
       form.reset();
       // Добавляем закрытие формы  после того как она очистится
       closeModal();
+      // Вызываем функцию setStorage, передавая значения полей формы в качестве аргументов
+      setStorage('newContact:', newContact);
     });
   };
 
