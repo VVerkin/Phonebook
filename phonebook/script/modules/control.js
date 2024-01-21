@@ -1,5 +1,14 @@
 'use strict';
 
+const {
+  createRow,
+} = require('./createElements');
+
+const {
+  setStorage,
+  removeStorage,
+} = require('./serviceStorage');
+
 // Ф-я открывает модальное окно с формой при нажатии на кнопку "Добавить"
 const modalControl = (btnAdd, formOverlay) => {
   // Ф-я добавляет класс для открыттия формы
@@ -85,9 +94,9 @@ const formControl = (form, list, closeModal) => {
   });
 };
 
-module.exports {
+module.exports = {
   modalControl,
   deleteControl,
-  addContactPage,
   formControl,
 };
+

@@ -25,8 +25,7 @@ const removeStorage = (phone) => {
   localStorage.setItem('contacts', JSON.stringify(updatedData));
 };
 
-module.exports {
+module.exports = {
 	getStorage,
-	setStorage,
 	removeStorage,
-}
+};

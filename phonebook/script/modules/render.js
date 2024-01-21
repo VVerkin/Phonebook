@@ -1,5 +1,18 @@
 'use strict';
 
+const {
+  createHeader,
+  createLogo,
+  createMain,
+  createButtonsGroup,
+  createTable,
+  createForm,
+  createFooter,
+  createCopyRight,
+  createRow,
+} = require('./createElements');
+
+
 // Основная функция
 const renderPhoneBook = (app, title) => {
   // Создаем хедер страницы
@@ -64,7 +77,7 @@ const renderContacts = (elem, data) => {
   return allRow;
 };
 
-module.exports {
+module.exports = {
   renderPhoneBook,
   renderContacts,
 };
