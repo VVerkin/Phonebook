@@ -26,7 +26,7 @@ const removeStorage = (phone) => {
 };
 
 module.exports = {
-	getStorage,
+  getStorage,
   setStorage,
-	removeStorage,
+  removeStorage,
 };
