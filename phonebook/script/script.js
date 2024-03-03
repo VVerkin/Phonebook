@@ -12,24 +12,20 @@
 кроме того, что необходимо вынести*/
 
 // Импортируем объекты из модулей и сразу деструктурируем объекты
-const {
+import {
   modalControl,
   deleteControl,
   formControl,
-} = require('./modules/control');
+} from './modules/control.js';
 
-const {
-  hoverRow,
-} = require('./modules/createElements');
+import hoverRow from './modules/createElements.js';
 
-const {
+import {
   renderPhoneBook,
   renderContacts,
-} = require('./modules/render');
+} from './modules/render.js';
 
-const {
-  getStorage,
-} = require('./modules/serviceStorage');
+import getStorage from './modules/serviceStorage.js';
 
 {
   // Ф-я, которая инициализирует наше приложение

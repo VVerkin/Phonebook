@@ -1,6 +1,6 @@
 'use strict';
 
-const {
+import {
   createHeader,
   createLogo,
   createMain,
@@ -10,7 +10,7 @@ const {
   createFooter,
   createCopyRight,
   createRow,
-} = require('./createElements');
+} from './createElements.js';
 
 
 // Основная функция
@@ -77,7 +77,7 @@ const renderContacts = (elem, data) => {
   return allRow;
 };
 
-module.exports = {
+export default {
   renderPhoneBook,
   renderContacts,
 };

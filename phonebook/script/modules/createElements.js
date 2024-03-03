@@ -187,7 +187,7 @@ const createCopyRight = title => {
 
 // Ф-я создает строку на основе данных из объекта. Можно так:   const createRow = dataObj, но лучше через деструктуризацию
 // В скобках сразу проводим деструктуризацию
-const createRow = ({name: firstName, surname, phone}) =>  {// Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
+export const createRow = ({name: firstName, surname, phone}) =>  {// Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
   // Создаем строку
   const tr = document.createElement('tr');
   // Назначасем класс contact, т.к. записываем контакты людей
@@ -244,7 +244,7 @@ const hoverRow = (allRow, logo) => {
   });
 };
 
-module.exports = {
+export default {
   createHeader,
   createLogo,
   createMain,
@@ -253,6 +253,5 @@ module.exports = {
   createForm,
   createFooter,
   createCopyRight,
-  createRow,
   hoverRow,
 };
