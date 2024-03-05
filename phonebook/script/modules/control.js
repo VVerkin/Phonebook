@@ -1,7 +1,7 @@
 
 import createElements from './createElements.js';
 
-import serviceStorage from './modules/serviceStorage.js';
+import serviceStorage from './serviceStorage.js';
 
 const {
   createRow,

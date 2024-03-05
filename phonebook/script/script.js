@@ -5,6 +5,8 @@ import render from './modules/render.js';
 
 import serviceStorage from './modules/serviceStorage.js';
 
+import createElements from './modules/createElements.js';
+
 
 const {
   modalControl,
@@ -13,9 +15,12 @@ const {
 } = control;
 
 const {
+  hoverRow,
+} = createElements;
+
+const {
   renderPhoneBook,
   renderContacts,
-  hoverRow,
 } = render;
 
 const {
