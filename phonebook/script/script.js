@@ -1,31 +1,26 @@
-'use strict';
 
-// Создадим временную ф-ю что-бы в будущем мы ее переписали и добавляли наши контакты в какое-то хранилище
-// const addContactData = contact => {
-  //Добавляем введенный пользователем контакт в исходный массив data
-//   data.push(contact);
-//   console.log('data:', data);
-// };
+import control from './modules/control.js';
 
-/*Создаем свою область видимости, 
-чтобы ничего не выходило в глобальную область, 
-кроме того, что необходимо вынести*/
+import render from './modules/render.js';
 
-// Импортируем объекты из модулей и сразу деструктурируем объекты
-import {
+import serviceStorage from './modules/serviceStorage.js';
+
+
+const {
   modalControl,
   deleteControl,
   formControl,
-} from './modules/control.js';
+} = control;
 
-import hoverRow from './modules/createElements.js';
-
-import {
+const {
   renderPhoneBook,
   renderContacts,
-} from './modules/render.js';
+  hoverRow,
+} = render;
 
-import getStorage from './modules/serviceStorage.js';
+const {
+  getStorage,
+} = serviceStorage;
 
 {
   // Ф-я, которая инициализирует наше приложение
@@ -58,4 +53,4 @@ import getStorage from './modules/serviceStorage.js';
   };
 
   window.phoneBookInit = init;
-}
+};

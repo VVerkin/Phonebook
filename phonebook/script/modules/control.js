@@ -1,11 +1,16 @@
-'use strict';
 
-import createRow from './createElements.js';
+import createElements from './createElements.js';
 
-import {
+import serviceStorage from './modules/serviceStorage.js';
+
+const {
+  createRow,
+} = createElements;
+
+const {
   setStorage,
   removeStorage,
-} from './serviceStorage.js';
+} = serviceStorage;
 
 // Ф-я открывает модальное окно с формой при нажатии на кнопку "Добавить"
 const modalControl = (btnAdd, formOverlay) => {

@@ -1,6 +1,6 @@
-'use strict';
+import createElements from './createElements.js';
 
-import {
+const {
   createHeader,
   createLogo,
   createMain,
@@ -10,7 +10,7 @@ import {
   createFooter,
   createCopyRight,
   createRow,
-} from './createElements.js';
+} = createElements;
 
 
 // Основная функция

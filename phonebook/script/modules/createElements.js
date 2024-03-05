@@ -1,5 +1,3 @@
-'use strict';
-
 //Ф-я создает контейнер
 const createContainer = () => {
   // Создаем эл-т div
@@ -187,7 +185,8 @@ const createCopyRight = title => {
 
 // Ф-я создает строку на основе данных из объекта. Можно так:   const createRow = dataObj, но лучше через деструктуризацию
 // В скобках сразу проводим деструктуризацию
-export const createRow = ({name: firstName, surname, phone}) =>  {// Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
+const createRow = ({name: firstName, surname, phone}) => {
+  // Переименовываем name в firatName, т.к. в глобальной области видимости уже есть name 
   // Создаем строку
   const tr = document.createElement('tr');
   // Назначасем класс contact, т.к. записываем контакты людей
@@ -254,4 +253,5 @@ export default {
   createFooter,
   createCopyRight,
   hoverRow,
+  createRow,
 };

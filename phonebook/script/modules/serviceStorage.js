@@ -1,7 +1,4 @@
-'use strict';
 
-/* Ф-я получает в виде аргумента ключ и по нему запрашивает 
-данные из localStorage и возвращает их, если их нет то возвращает пустой массив */
 const getStorage = (key) => {
   // Запрос данных из localStore по ключу и распарсивание полученного объекта
   const localData = JSON.parse(localStorage.getItem(key));
@@ -26,7 +23,7 @@ const removeStorage = (phone) => {
 };
 
 export default {
-	getStorage,
+  getStorage,
   setStorage,
-	removeStorage,
+  removeStorage,
 };
