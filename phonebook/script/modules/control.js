@@ -1,19 +1,14 @@
 
 import createElements from './createElements.js';
 
-import serviceStorage from './serviceStorage.js';
+import {setStorage, removeStorage} from './serviceStorage.js';
 
 const {
   createRow,
 } = createElements;
 
-const {
-  setStorage,
-  removeStorage,
-} = serviceStorage;
-
 // Ф-я открывает модальное окно с формой при нажатии на кнопку "Добавить"
-const modalControl = (btnAdd, formOverlay) => {
+export const modalControl = (btnAdd, formOverlay) => {
   // Ф-я добавляет класс для открыттия формы
   const openModal = () => {
     formOverlay.classList.add('is-visible');
@@ -39,7 +34,7 @@ const modalControl = (btnAdd, formOverlay) => {
   };
 };
   // Ф-я при нажатии на кнопку "Удалить" показывает крестики, при нажатии на которые удаляется строка
-const deleteControl = (btnDel, list) => {
+export const deleteControl = (btnDel, list) => {
   // Навешиваем событие на кнопку "Удалить"
   btnDel.addEventListener('click', () => {
     // Проходим по таблице, находим элементы с классом delete и показываем их
@@ -63,13 +58,13 @@ const deleteControl = (btnDel, list) => {
   });
 };
   // Ф-я принимает contact и list и добавляет contact в list
-const addContactPage = (contact, list) => {
+export const addContactPage = (contact, list) => {
   // добавляет contact в list  с применением ф-и createRow, которая на основе объекта делает строку
   list.append(createRow(contact));
 };
 
 // Функция обрабатывает форму
-const formControl = (form, list, closeModal) => {
+export const formControl = (form, list, closeModal) => {
   // Вешаем событе на нажатие кнопки "Добавить" в форме
   form.addEventListener('submit', e => {
     // Убираем стандартную перезагрузку страницы при нажатии на кнопку "добавить"
@@ -96,10 +91,3 @@ const formControl = (form, list, closeModal) => {
     setStorage('contacts', newContact);
   });
 };
-
-export default {
-  modalControl,
-  deleteControl,
-  formControl,
-};
-
