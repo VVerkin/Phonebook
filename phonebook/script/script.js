@@ -1,9 +1,9 @@
 
-import control from './modules/control.js';
+import * as control from './modules/control.js';
 
 import render from './modules/render.js';
 
-import serviceStorage from './modules/serviceStorage.js';
+import {getStorage} from './modules/serviceStorage.js';
 
 import createElements from './modules/createElements.js';
 
@@ -22,10 +22,6 @@ const {
   renderPhoneBook,
   renderContacts,
 } = render;
-
-const {
-  getStorage,
-} = serviceStorage;
 
 {
   // Ф-я, которая инициализирует наше приложение

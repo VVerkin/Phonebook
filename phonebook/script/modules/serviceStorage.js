@@ -1,5 +1,5 @@
 
-const getStorage = (key) => {
+export const getStorage = (key) => {
   // Запрос данных из localStore по ключу и распарсивание полученного объекта
   const localData = JSON.parse(localStorage.getItem(key));
   // Условие, при котором возвращаются данне, а если их нет - пустой массив
@@ -7,7 +7,7 @@ const getStorage = (key) => {
 };
 console.log(getStorage());
   // Ф-я получает ключ и объект в виде аргументов и дописывает данные в localStorage
-const setStorage = (key, obj) => {
+export const setStorage = (key, obj) => {
   // Вызываем ф-ю, которая получает данные из localStorage и возвращает их.
   const newData = getStorage(key);
   // Добавляем данные (объект) в массив
@@ -16,14 +16,9 @@ const setStorage = (key, obj) => {
   localStorage.setItem('contacts', JSON.stringify(newData));
 };
   // removeStorage получает в виде аргумента номер телефона, и удаляет контакт из localStorage
-const removeStorage = (phone) => {
+export const removeStorage = (phone) => {
   const existingData = getStorage('contacts');
   const updatedData = existingData.filter(contact => contact.phone !== phone);
   localStorage.setItem('contacts', JSON.stringify(updatedData));
 };
 
-export default {
-  getStorage,
-  setStorage,
-  removeStorage,
-};
